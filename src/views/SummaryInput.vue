@@ -1,5 +1,5 @@
 <template>
-  <div>SummryInput</div>
+  <div>input</div>
 </template>
 
 <script lang="ts">
