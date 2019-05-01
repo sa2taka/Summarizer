@@ -1,5 +1,10 @@
 <template>
-  <div>input</div>
+  <v-tabs dark>
+    <v-tab ripple>manual</v-tab>
+    <v-tab ripple>with stop watch</v-tab>
+    <v-tab-item>manual</v-tab-item>
+    <v-tab-item>stop watch</v-tab-item>
+  </v-tabs>
 </template>
 
 <script lang="ts">
