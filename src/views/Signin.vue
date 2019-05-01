@@ -12,9 +12,16 @@ import 'firebase/auth';
 
 @Component
 export default class Signin extends Vue {
-  gotoLogin() {
+  public gotoLogin() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then((result) => {
+        if (result.user) {
+          this.$router.push({ name: 'home' });
+        }
+      });
   }
 }
 </script>
