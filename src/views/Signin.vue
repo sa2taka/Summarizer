@@ -9,6 +9,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
 
 @Component
 export default class Signin extends Vue {
@@ -19,6 +20,12 @@ export default class Signin extends Vue {
       .signInWithPopup(provider)
       .then((result) => {
         if (result.user) {
+          const db = firebase.firestore();
+          db.collection('users')
+            .doc(result.user.uid)
+            .set({
+              name: result.user.displayName,
+            });
           this.$router.push({ name: 'home' });
         }
       });
