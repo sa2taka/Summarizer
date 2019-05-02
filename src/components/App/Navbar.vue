@@ -47,6 +47,7 @@ export default class Navbar extends Vue {
   public signout() {
     this.signoutDialog = true;
     firebase.auth().signOut();
+    this.$router.push({ name: 'signin' });
   }
 }
 </script>
