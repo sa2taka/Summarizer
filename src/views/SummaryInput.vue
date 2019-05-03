@@ -1,17 +1,24 @@
 <template>
-  <v-tabs dark>
-    <v-tab ripple>manual</v-tab>
-    <v-tab ripple>with stop watch</v-tab>
-    <v-tab-item>manual</v-tab-item>
-    <v-tab-item>stop watch</v-tab-item>
-  </v-tabs>
+  <div class="summary-input">
+    <Subject v-model="selectedSubject"></Subject>
+    <Time></Time>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Time from '@/components/SummaryInput/Time.vue';
+import Subject from '@/components/SummaryInput/Subject.vue';
 
-@Component
-export default class SummaryInput extends Vue {}
+@Component({
+  components: {
+    Time,
+    Subject,
+  },
+})
+export default class SummaryInput extends Vue {
+  public selectedSubject: string = '';
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
