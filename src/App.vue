@@ -33,6 +33,6 @@ export default class App extends Vue {}
 }
 
 .empty {
-  height: 64px;
+  height: 32px;
 }
 </style>

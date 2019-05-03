@@ -26,6 +26,7 @@
           class="subject-input"
           :rules="[rules.required]"
           :error="inputSubject.length === 0"
+          @keyup.enter="addValue"
         ></v-text-field>
         <v-card-actions>
           <v-spacer></v-spacer>
