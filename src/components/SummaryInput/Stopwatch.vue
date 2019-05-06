@@ -17,6 +17,7 @@ import Time from './Time.vue';
 export default class Stopwatch extends Vue {
   public displayTime = '00：00：00';
   private startTime: number = 0;
+  private decidedTime: number = 0;
   private isStart: boolean = false;
 
   public created() {
@@ -41,6 +42,7 @@ export default class Stopwatch extends Vue {
 
   private stopWatch() {
     this.isStart = false;
+    this.decidedTime += Date.now() - this.startTime;
   }
 
   private updateWatch() {
@@ -50,8 +52,10 @@ export default class Stopwatch extends Vue {
       return '00：00：00';
     }
 
-    const diffSec = Number((Date.now() - this.startTime) / 1000);
-    this.displayTime = this.formatTime(diffSec);
+    const time = Number(
+      (Date.now() - this.startTime + this.decidedTime) / 1000
+    );
+    this.displayTime = this.formatTime(time);
   }
 
   private formatTime(time: number): string {
