@@ -5,7 +5,11 @@
         <Manual class="time-input-content" v-show="bottomNav === manual" @input="onInputTime"></Manual>
       </transition>
       <transition name="slide-fade">
-        <div class="time-input-content" v-show="bottomNav === stopwatch">stopwatch</div>
+        <Stopwatch
+          class="time-input-content"
+          v-show="bottomNav === stopwatch"
+          @input="onInputTime"
+        >stopwatch</Stopwatch>
       </transition>
     </div>
 
@@ -25,6 +29,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Manual from '@/components/SummaryInput/Manual.vue';
+import Stopwatch from '@/components/SummaryInput/Stopwatch.vue';
 
 enum TimeType {
   manual = 'manual',
@@ -33,6 +38,7 @@ enum TimeType {
 @Component({
   components: {
     Manual,
+    Stopwatch,
   },
 })
 export default class Time extends Vue {

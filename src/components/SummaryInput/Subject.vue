@@ -16,6 +16,7 @@
         </v-btn>
       </div>
     </v-flex>
+
     <v-dialog v-model="isAddingValue" persistent max-width="290">
       <v-card>
         <v-card-title class="headline">New Subject</v-card-title>
