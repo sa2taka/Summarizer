@@ -1,7 +1,12 @@
 <template>
   <div class="subject">
     <v-flex xs12 sm6 d-flex>
-      <v-select :value="selectedSubject" @input="onSelectSubject" :items="items" label="Subject"></v-select>
+      <v-select
+        :value="selectedSubject"
+        @input="onSelectSubject"
+        :items="displaiedItems"
+        label="Subject"
+      ></v-select>
       <div>
         <v-btn
           id="subject-add-button"
@@ -42,6 +47,7 @@
 <script lang="ts">
 import { Component, Watch, Emit, Prop, Vue } from 'vue-property-decorator';
 import { DisplaiedEvent, EventType } from '../../libs/DisplaiedEvent';
+import * as Consts from '../../libs/Consts';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
@@ -64,6 +70,12 @@ export default class Subject extends Vue {
 
   @Emit()
   public input(value: string) {}
+
+  public get displaiedItems(): string[] {
+    return this.items.filter((value) => {
+      return value !== Consts.SUBJECT_RESUME_ID;
+    });
+  }
 
   public created() {
     window.addEventListener('click', ({ target }) => {

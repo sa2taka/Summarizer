@@ -28,8 +28,8 @@ export default class Stopwatch extends Vue {
 
   public created() {
     firebase.auth().onAuthStateChanged((user) => {
-      const subjectRef = this.getSubjectRef();
-      subjectRef
+      const workRef = this.getWorkRef();
+      workRef
         .doc(Consts.SUBJECT_RESUME_ID)
         .get()
         .then((snapshot) => {
@@ -62,8 +62,8 @@ export default class Stopwatch extends Vue {
   private startWatch() {
     this.isStart = true;
     this.startTime = Date.now();
-    const subjectRef = this.getSubjectRef();
-    subjectRef.doc(Consts.SUBJECT_RESUME_ID).set({
+    const workRef = this.getWorkRef();
+    workRef.doc(Consts.SUBJECT_RESUME_ID).set({
       isStart: true,
       startTime: this.startTime,
       decidedTime: this.decidedTime,
@@ -73,8 +73,8 @@ export default class Stopwatch extends Vue {
   private stopWatch() {
     this.isStart = false;
     this.decidedTime += Date.now() - this.startTime;
-    const subjectRef = this.getSubjectRef();
-    subjectRef.doc(Consts.SUBJECT_RESUME_ID).set({
+    const workRef = this.getWorkRef();
+    workRef.doc(Consts.SUBJECT_RESUME_ID).set({
       isStart: false,
       decidedTime: this.decidedTime,
     });
@@ -103,8 +103,8 @@ export default class Stopwatch extends Vue {
     )}：${this.putZeroPrefix(seconds, 2)}`;
   }
 
-  // FIXME: getSubjectRefはSubject.vueでも定義されている、どこかmoduleとして抜き出したい
-  private getSubjectRef() {
+  // FIXME: getWorkRefはSubject.vueでも定義されている、どこかmoduleとして抜き出したい
+  private getWorkRef() {
     const user = firebase.auth().currentUser;
     if (!user) {
       this.$store.dispatch(
@@ -115,12 +115,12 @@ export default class Stopwatch extends Vue {
     }
 
     const db = firebase.firestore();
-    const subjectRef = db
+    const workRef = db
       .collection('users')
       .doc(user!.uid)
-      .collection('subjects');
+      .collection('works');
 
-    return subjectRef;
+    return workRef;
   }
 
   private putZeroPrefix(str: string, length: number) {
