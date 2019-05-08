@@ -27,14 +27,19 @@
       </div>
 
       <transition name="slide-fade">
-        <Manual class="time-input-content" v-show="bottomNav === manual" @input="onInputTime"></Manual>
+        <v-flex
+          class="material-surface elevation-2"
+          align-center
+          justify-center
+          v-show="bottomNav === manual"
+        >
+          <Manual class="time-input-content" @input="onInputTime"></Manual>
+        </v-flex>
       </transition>
       <transition name="slide-fade">
-        <Stopwatch
-          class="time-input-content"
-          v-show="bottomNav === stopwatch"
-          @input="onInputTime"
-        >stopwatch</Stopwatch>
+        <div class="material-surface elevation-2" v-show="bottomNav === stopwatch">
+          <Stopwatch class="time-input-content" @input="onInputTime">stopwatch</Stopwatch>
+        </div>
       </transition>
     </div>
 
@@ -89,7 +94,7 @@ export default class Time extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .time-input-area {
-  min-height: 320px;
+  min-height: 420px;
 }
 
 .date-input-content {
@@ -99,22 +104,28 @@ export default class Time extends Vue {
   width: 420px;
 }
 
-.time-input-content {
-  position: absolute;
-}
 .slide-fade-enter-active {
-  transition: all 0.3s ease;
+  transition: transform 0.6s ease, opacity 0.3s ease-out 0.2s;
 }
+
 .slide-fade-leave-active {
-  transition: all 0.3s ease;
+  transition: transform 0.6s ease, opacity 0.2s ease-in;
 }
+
+.slide-fade-leave-to,
 .slide-fade-enter {
-  transform: translateX(-100px);
+  transform: rotateY(180deg);
   opacity: 0;
 }
 
-.slide-fade-leave-to {
-  transform: translateX(100px);
-  opacity: 0;
+.material-surface {
+  position: absolute;
+  height: 320px;
+  width: 320px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-color: #343434;
+  border-radius: 50%;
 }
 </style>

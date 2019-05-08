@@ -1,18 +1,16 @@
 <template>
   <div class="manual manual-time-area">
-    <v-flex justify-center align-center>
-      <div class="manual-time-input">
-        <v-select :items="hours" v-model="hour" label="hour" append-icon class="selected-center"></v-select>
-        <p class="time-colon">:</p>
-        <v-select
-          :items="minutes"
-          v-model="minute"
-          label="minute"
-          append-icon
-          class="selected-center"
-        ></v-select>
-      </div>
-    </v-flex>
+    <v-layout row justify-center align-center class="manual-time-input">
+      <v-select :items="hours" v-model="hour" label="hour" append-icon class="selected-center"></v-select>
+      <p class="time-colon">:</p>
+      <v-select
+        :items="minutes"
+        v-model="minute"
+        label="minute"
+        append-icon
+        class="selected-center"
+      ></v-select>
+    </v-layout>
   </div>
 </template>
 
@@ -54,19 +52,20 @@ export default class Manual extends Vue {
   display: flex;
   justify-content: center;
   text-align: center;
-  width: 100%;
+  height: 100%;
+  margin: auto 20px;
 }
 
 .manual-time-input {
-  width: 320px;
-  margin: 80px auto;
-  display: flex;
+  width: 280px;
+  height: 100%;
+  margin: auto;
 }
 
 // v-selectのhack
 .selected-center .v-select__selection {
   width: 100%;
   justify-content: center;
-  font-size: 32px;
+  font-size: 30px;
 }
 </style>

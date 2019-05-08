@@ -137,11 +137,13 @@ export default class Stopwatch extends Vue {
   flex-flow: column;
   justify-content: center;
   text-align: center;
+  margin: auto;
   width: 100%;
+  height: 100%;
 }
 
 .display-watch {
-  font-size: 64px;
+  font-size: 44px;
   margin: 12px 0;
 }
 

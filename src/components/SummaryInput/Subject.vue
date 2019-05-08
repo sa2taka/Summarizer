@@ -13,6 +13,7 @@
           fab
           dark
           small
+          depressed
           color="teal"
           class="add-button"
           @click="clickedAddSubject"
@@ -160,7 +161,7 @@ export default class Subject extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .subject {
-  margin: 0 10%;
+  margin: 0 10% 32px 10%;
 }
 
 .subject-input {
