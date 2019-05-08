@@ -28,8 +28,6 @@ export default class App extends Vue {}
 <style lang="scss" scoped>
 .main-container {
   position: relative;
-  width: 80%;
-  left: 10%;
 }
 
 .empty {

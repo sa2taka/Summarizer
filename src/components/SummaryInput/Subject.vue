@@ -1,5 +1,5 @@
 <template>
-  <div id="subject">
+  <div class="subject">
     <v-flex xs12 sm6 d-flex>
       <v-select :value="selectedSubject" @input="onSelectSubject" :items="items" label="Subject"></v-select>
       <div>
@@ -103,7 +103,6 @@ export default class Subject extends Vue {
       return;
     }
 
-    const db = firebase.firestore();
     const subjectRef = this.getSubjectRef();
     subjectRef
       .doc(this.inputSubject)
@@ -148,6 +147,10 @@ export default class Subject extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.subject {
+  margin: 0 10%;
+}
+
 .subject-input {
   width: 80%;
   margin: 0 20px;

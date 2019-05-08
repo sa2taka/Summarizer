@@ -13,6 +13,12 @@
 <script lang="ts">
 import { Component, Emit, Watch, Vue } from 'vue-property-decorator';
 import Time from './Time.vue';
+import { DisplaiedEvent, EventType } from '../../libs/DisplaiedEvent';
+import * as Consts from '../../libs/Consts';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
+
 @Component
 export default class Stopwatch extends Vue {
   public displayTime = '00：00：00';
@@ -21,7 +27,25 @@ export default class Stopwatch extends Vue {
   private isStart: boolean = false;
 
   public created() {
-    this.updateWatch();
+    firebase.auth().onAuthStateChanged((user) => {
+      const subjectRef = this.getSubjectRef();
+      subjectRef
+        .doc(Consts.SUBJECT_RESUME_ID)
+        .get()
+        .then((snapshot) => {
+          if (!snapshot.exists) {
+            return;
+          }
+          const data = snapshot.data();
+          this.startTime = data!.isStart ? data!.startTime : 0;
+          this.isStart = data!.isStart;
+          this.decidedTime = data!.decidedTime;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.updateWatch();
+    });
   }
 
   @Emit()
@@ -38,35 +62,65 @@ export default class Stopwatch extends Vue {
   private startWatch() {
     this.isStart = true;
     this.startTime = Date.now();
+    const subjectRef = this.getSubjectRef();
+    subjectRef.doc(Consts.SUBJECT_RESUME_ID).set({
+      isStart: true,
+      startTime: this.startTime,
+      decidedTime: this.decidedTime,
+    });
   }
 
   private stopWatch() {
     this.isStart = false;
     this.decidedTime += Date.now() - this.startTime;
+    const subjectRef = this.getSubjectRef();
+    subjectRef.doc(Consts.SUBJECT_RESUME_ID).set({
+      isStart: false,
+      decidedTime: this.decidedTime,
+    });
   }
 
   private updateWatch() {
     setTimeout(this.updateWatch, 200);
-    if (!this.isStart) {
-      // ：は全角(見た目が特にスタイルを弄らなくても綺麗)
-      return '00：00：00';
-    }
-
-    const time = Number(
+    const pausedTime = Number(this.decidedTime / 1000);
+    const activeTime = Number(
       (Date.now() - this.startTime + this.decidedTime) / 1000
     );
+
+    const time = this.isStart ? activeTime : pausedTime;
+
     this.displayTime = this.formatTime(time);
   }
 
   private formatTime(time: number): string {
-    const hour = `${Math.round((time / 3600) % 24)}`;
-    const minute = `${Math.round((time / 60) % 60)}`;
-    const seconds = `${Math.round(time % 60)}`;
+    const hour = `${Math.floor((time / 3600) % 24)}`;
+    const minute = `${Math.floor((time / 60) % 60)}`;
+    const seconds = `${Math.floor(time % 60)}`;
 
     return `${this.putZeroPrefix(hour, 2)}：${this.putZeroPrefix(
       minute,
       2
     )}：${this.putZeroPrefix(seconds, 2)}`;
+  }
+
+  // FIXME: getSubjectRefはSubject.vueでも定義されている、どこかmoduleとして抜き出したい
+  private getSubjectRef() {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+      this.$store.dispatch(
+        'pushEvent',
+        new DisplaiedEvent('Require Authentication', EventType.Error)
+      );
+      this.$router.push({ name: 'signin' });
+    }
+
+    const db = firebase.firestore();
+    const subjectRef = db
+      .collection('users')
+      .doc(user!.uid)
+      .collection('subjects');
+
+    return subjectRef;
   }
 
   private putZeroPrefix(str: string, length: number) {
