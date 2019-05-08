@@ -59,7 +59,7 @@ export default class Manual extends Vue {
 
 .manual-time-input {
   width: 320px;
-  margin: 100px auto;
+  margin: 80px auto;
   display: flex;
 }
 

@@ -1,6 +1,31 @@
 <template>
   <div class="time">
     <div class="time-input-area">
+      <div class="date-input-content">
+        <v-flex justify-center align-center>
+          <v-menu
+            v-model="menu"
+            :close-on-content-click="false"
+            :nudge-right="30"
+            lazy
+            transition="scale-transition"
+            offset-y
+            min-width="290px"
+          >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="date"
+                label="Study Date"
+                prepend-icon="event"
+                readonly
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="date" @input="menu = false"></v-date-picker>
+          </v-menu>
+        </v-flex>
+      </div>
+
       <transition name="slide-fade">
         <Manual class="time-input-content" v-show="bottomNav === manual" @input="onInputTime"></Manual>
       </transition>
@@ -44,6 +69,8 @@ enum TimeType {
 export default class Time extends Vue {
   public bottomNav = TimeType.manual;
   public studyTime = 0;
+  public date = new Date().toISOString().substr(0, 10);
+  public menu = false;
 
   public get manual(): string {
     return TimeType.manual;
@@ -62,7 +89,14 @@ export default class Time extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .time-input-area {
-  min-height: 240px;
+  min-height: 320px;
+}
+
+.date-input-content {
+  position: relative;
+  padding: 0 40px 0 0;
+  margin: 0 auto;
+  width: 420px;
 }
 
 .time-input-content {
