@@ -14,31 +14,26 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                v-model="date"
+                :value="date"
                 label="Study Date"
                 prepend-icon="event"
                 readonly
                 v-on="on"
               ></v-text-field>
             </template>
-            <v-date-picker v-model="date" @input="menu = false"></v-date-picker>
+            <v-date-picker :value="date" @input="onInputDate"></v-date-picker>
           </v-menu>
         </v-flex>
       </div>
 
       <transition name="slide-fade">
-        <v-flex
-          class="material-surface elevation-2"
-          align-center
-          justify-center
-          v-show="bottomNav === manual"
-        >
-          <Manual class="time-input-content" @input="onInputTime"></Manual>
-        </v-flex>
+        <div class="material-surface elevation-2" v-show="bottomNav === manual">
+          <Manual class="time-input-content" @input="onManualInputTime"></Manual>
+        </div>
       </transition>
       <transition name="slide-fade">
         <div class="material-surface elevation-2" v-show="bottomNav === stopwatch">
-          <Stopwatch class="time-input-content" @input="onInputTime">stopwatch</Stopwatch>
+          <Stopwatch class="time-input-content" @input="onStopWatchInputTime">stopwatch</Stopwatch>
         </div>
       </transition>
     </div>
@@ -57,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Watch, Emit, Vue } from 'vue-property-decorator';
 import Manual from '@/components/SummaryInput/Manual.vue';
 import Stopwatch from '@/components/SummaryInput/Stopwatch.vue';
 
@@ -73,9 +68,31 @@ enum TimeType {
 })
 export default class Time extends Vue {
   public bottomNav = TimeType.manual;
-  public studyTime = 0;
-  public date = new Date().toISOString().substr(0, 10);
+  @Prop({ required: true })
+  public date!: string;
   public menu = false;
+  private manualTime: number = 0;
+  private stopwatchTime: number = 0;
+
+  @Emit('input-time')
+  public inputTime(value: number) {}
+
+  @Emit('input-date')
+  public inputDate(value: string) {}
+
+  @Watch('bottomNav')
+  public onChangeBottomNav() {
+    switch (this.bottomNav) {
+      case this.manual:
+        this.inputTime(this.manualTime);
+        break;
+      case this.stopwatch:
+        this.inputTime(this.stopwatchTime);
+        break;
+      default:
+        break;
+    }
+  }
 
   public get manual(): string {
     return TimeType.manual;
@@ -85,8 +102,23 @@ export default class Time extends Vue {
     return TimeType.stopwatch;
   }
 
-  public onInputTime(value: number) {
-    this.studyTime = value;
+  public onManualInputTime(value: number) {
+    this.manualTime = value;
+    if (this.bottomNav === this.manual) {
+      this.inputTime(value);
+    }
+  }
+
+  public onStopWatchInputTime(value: number) {
+    this.stopwatchTime = value;
+    if (this.bottomNav === this.stopwatch) {
+      this.inputTime(value);
+    }
+  }
+
+  public onInputDate(value: string) {
+    this.inputDate(value);
+    this.menu = false;
   }
 }
 </script>

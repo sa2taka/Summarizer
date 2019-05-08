@@ -59,6 +59,12 @@ export default class Stopwatch extends Vue {
     }
   }
 
+  @Watch('displayTime')
+  public onChangeTime() {
+    const time = this.selectTime();
+    this.input(this.changeToMinute(time));
+  }
+
   private startWatch() {
     this.isStart = true;
     this.startTime = Date.now();
@@ -82,14 +88,18 @@ export default class Stopwatch extends Vue {
 
   private updateWatch() {
     setTimeout(this.updateWatch, 200);
+    const time = this.selectTime();
+
+    this.displayTime = this.formatTime(time);
+  }
+
+  private selectTime(): number {
     const pausedTime = Number(this.decidedTime / 1000);
     const activeTime = Number(
       (Date.now() - this.startTime + this.decidedTime) / 1000
     );
 
-    const time = this.isStart ? activeTime : pausedTime;
-
-    this.displayTime = this.formatTime(time);
+    return this.isStart ? activeTime : pausedTime;
   }
 
   private formatTime(time: number): string {
@@ -125,6 +135,10 @@ export default class Stopwatch extends Vue {
 
   private putZeroPrefix(str: string, length: number) {
     return ('0' + str).slice(-length);
+  }
+
+  private changeToMinute(time: number): number {
+    return (Math.floor(time / 3600) % 24) + Math.floor((time / 60) % 60);
   }
 }
 </script>

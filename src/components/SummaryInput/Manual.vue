@@ -1,13 +1,21 @@
 <template>
   <div class="manual manual-time-area">
     <v-layout row justify-center align-center class="manual-time-input">
-      <v-select :items="hours" v-model="hour" label="hour" append-icon class="selected-center"></v-select>
+      <v-select
+        :items="hours"
+        v-model="hour"
+        label="hour"
+        append-icon
+        class="selected-center"
+        @change="changedStudyTime"
+      ></v-select>
       <p class="time-colon">:</p>
       <v-select
         :items="minutes"
         v-model="minute"
         label="minute"
         append-icon
+        @change="changedStudyTime"
         class="selected-center"
       ></v-select>
     </v-layout>
@@ -33,7 +41,6 @@ export default class Manual extends Vue {
   @Emit()
   public input(value: number) {}
 
-  @Watch('studyTime')
   public changedStudyTime() {
     this.input(this.studyTime);
   }
