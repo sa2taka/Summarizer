@@ -55,6 +55,10 @@
 import { Component, Prop, Watch, Emit, Vue } from 'vue-property-decorator';
 import Manual from '@/components/SummaryInput/Manual.vue';
 import Stopwatch from '@/components/SummaryInput/Stopwatch.vue';
+import * as Consts from '../../libs/Consts';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
 
 enum TimeType {
   manual = 'manual',
@@ -100,6 +104,25 @@ export default class Time extends Vue {
 
   public get stopwatch(): string {
     return TimeType.stopwatch;
+  }
+
+  public created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      const db = firebase.firestore();
+      db.collection('users')
+        .doc(user!.uid)
+        .collection('works')
+        .doc(Consts.SUBJECT_RESUME_ID)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            this.bottomNav = TimeType.stopwatch;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
   }
 
   public onManualInputTime(value: number) {

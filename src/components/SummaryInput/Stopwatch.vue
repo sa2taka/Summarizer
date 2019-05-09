@@ -138,7 +138,7 @@ export default class Stopwatch extends Vue {
   }
 
   private changeToMinute(time: number): number {
-    return (Math.floor(time / 3600) % 24) + Math.floor((time / 60) % 60);
+    return (Math.floor(time / 3600) % 24) * 60 + Math.floor((time / 60) % 60);
   }
 }
 </script>
