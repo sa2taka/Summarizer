@@ -36,7 +36,12 @@ export default class Stopwatch extends Vue {
           if (!snapshot.exists) {
             return;
           }
+
           const data = snapshot.data();
+
+          if (!snapshot.data()!.decidedTime) {
+            return;
+          }
           this.startTime = data!.isStart ? data!.startTime : 0;
           this.isStart = data!.isStart;
           this.decidedTime = data!.decidedTime;
@@ -69,7 +74,10 @@ export default class Stopwatch extends Vue {
     this.isStart = true;
     this.startTime = Date.now();
     const workRef = this.getWorkRef();
-    workRef.doc(Consts.SUBJECT_RESUME_ID).set({
+
+    // 上位ロジックで必ずこのIDのdocが存在することを前提としている
+    // こういうのをVuexの管理下においたほうがいいのかも知れない
+    workRef.doc(Consts.SUBJECT_RESUME_ID).update({
       isStart: true,
       startTime: this.startTime,
       decidedTime: this.decidedTime,
@@ -80,7 +88,9 @@ export default class Stopwatch extends Vue {
     this.isStart = false;
     this.decidedTime += Date.now() - this.startTime;
     const workRef = this.getWorkRef();
-    workRef.doc(Consts.SUBJECT_RESUME_ID).set({
+
+    // 上位ロジックで必ずこのIDのdocが存在することを前提としている
+    workRef.doc(Consts.SUBJECT_RESUME_ID).update({
       isStart: false,
       decidedTime: this.decidedTime,
     });

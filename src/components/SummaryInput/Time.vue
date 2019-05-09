@@ -115,7 +115,7 @@ export default class Time extends Vue {
         .doc(Consts.SUBJECT_RESUME_ID)
         .get()
         .then((snapshot) => {
-          if (snapshot.exists) {
+          if (snapshot.exists && snapshot.data()!.decidedTime) {
             this.bottomNav = TimeType.stopwatch;
           }
         })

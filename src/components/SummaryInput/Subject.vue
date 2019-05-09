@@ -1,12 +1,7 @@
 <template>
   <div class="subject">
     <v-flex xs12 sm6 d-flex>
-      <v-select
-        :value="selectedSubject"
-        @input="onSelectSubject"
-        :items="displaiedItems"
-        label="Subject"
-      ></v-select>
+      <v-select :value="value" @input="onSelectSubject" :items="displaiedItems" label="Subject"></v-select>
       <div>
         <v-btn
           id="subject-add-button"
@@ -65,7 +60,7 @@ export default class Subject extends Vue {
   };
 
   @Prop()
-  public selectedSubject!: string;
+  public value!: string;
 
   private AddValueText = 'Add New Subject';
 
@@ -126,6 +121,7 @@ export default class Subject extends Vue {
       })
       .then((e) => {
         this.items.unshift(this.inputSubject);
+        this.value = this.inputSubject;
         this.$store.dispatch(
           'pushEvent',
           new DisplaiedEvent('Success', EventType.Success)
