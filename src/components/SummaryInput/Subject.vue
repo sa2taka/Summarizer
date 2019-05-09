@@ -91,6 +91,7 @@ export default class Subject extends Vue {
     firebase.auth().onAuthStateChanged((user) => {
       const subjectRef = this.getSubjectRef();
       subjectRef
+        .orderBy('updated_at', 'desc')
         .get()
         .then((snapshot) => {
           snapshot.forEach((elm) => {
@@ -119,9 +120,12 @@ export default class Subject extends Vue {
     const subjectRef = this.getSubjectRef();
     subjectRef
       .doc(this.inputSubject)
-      .set({})
+      .set({
+        created_at: firebase.firestore.FieldValue.serverTimestamp(),
+        updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+      })
       .then((e) => {
-        this.items.push(this.inputSubject);
+        this.items.unshift(this.inputSubject);
         this.$store.dispatch(
           'pushEvent',
           new DisplaiedEvent('Success', EventType.Success)
