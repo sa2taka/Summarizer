@@ -92,6 +92,9 @@ export default class Subject extends Vue {
           snapshot.forEach((elm) => {
             this.items.push(elm.id);
           });
+          if (!this.items.includes(this.value)) {
+            this.input(this.items[0]);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -121,7 +124,7 @@ export default class Subject extends Vue {
       })
       .then((e) => {
         this.items.unshift(this.inputSubject);
-        this.value = this.inputSubject;
+        this.input(this.inputSubject);
         this.$store.dispatch(
           'pushEvent',
           new DisplaiedEvent('Success', EventType.Success)

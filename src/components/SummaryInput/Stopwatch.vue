@@ -37,14 +37,13 @@ export default class Stopwatch extends Vue {
             return;
           }
 
-          const data = snapshot.data();
-
-          if (!snapshot.data()!.decidedTime) {
+          const data = snapshot.data()!;
+          if (!data.decidedTime && data.decidedTime !== 0) {
             return;
           }
-          this.startTime = data!.isStart ? data!.startTime : 0;
-          this.isStart = data!.isStart;
-          this.decidedTime = data!.decidedTime;
+          this.startTime = data.isStart ? data!.startTime : 0;
+          this.isStart = data.isStart;
+          this.decidedTime = data.decidedTime;
         })
         .catch((error) => {
           console.log(error);
