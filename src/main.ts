@@ -4,8 +4,19 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './registerServiceWorker';
+import * as firebase from 'firebase/app';
 
 Vue.config.productionTip = false;
+
+const config = {
+  apiKey: 'AIzaSyCYY4XQDVNtw87M2-MRBy2xHY9nap244O8',
+  authDomain: 'summrizer.firebaseapp.com',
+  databaseURL: 'https://summrizer.firebaseio.com',
+  projectId: 'summrizer',
+  storageBucket: 'summrizer.appspot.com',
+  messagingSenderId: '485910235905',
+};
+firebase.initializeApp(config);
 
 new Vue({
   router,
