@@ -4,6 +4,11 @@
     <Time :date="date" @input-time="atInputTime" @input-date="atInputDate"></Time>
 
     <div class="add-summary-button-area">
+      <!--
+        dialogの部分はNavBarの部分と同じ
+        コンポーネントを分けようとも思ったが、結局ボタンの部分が内部に入ってきてしまうため一旦断念
+        何個か同じような処理が必要になったらさすがにコンポーネント化する
+      -->
       <v-dialog v-model="showDialog" persistent max-width="290">
         <template v-slot:activator="{ on }">
           <v-btn
@@ -88,8 +93,10 @@ export default class SummaryInput extends Vue {
             snapshot.exists &&
             // snapShotがstartしている => ストップウォッチを以前開始した
             (snapshot.data()!.isStart ||
-              // decidedTimeが0ではない => ストップウォッチを以前止めた
-              snapshot.data()!.decidedTime !== 0)
+              // snapShotがundefinedではない
+              (snapshot.data()!.decidedTime &&
+                // かつdecidedTimeが0ではない => ストップウォッチを以前止めた
+                snapshot.data()!.decidedTime !== 0))
           ) {
             const data = snapshot.data()!;
             this.selectedSubject = data.subject;

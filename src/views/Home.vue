@@ -29,8 +29,10 @@ export default class Home extends Vue {
             snapshot.exists &&
             // snapShotがstartしている => ストップウォッチを以前開始した
             (snapshot.data()!.isStart ||
-              // decidedTimeが0ではない => ストップウォッチを以前止めた
-              snapshot.data()!.decidedTime !== 0)
+              // snapShotがundefinedではない
+              (snapshot.data()!.decidedTime &&
+                // かつdecidedTimeが0ではない => ストップウォッチを以前止めた
+                snapshot.data()!.decidedTime !== 0))
           ) {
             this.$router.push({ name: 'summary-input' });
           }
