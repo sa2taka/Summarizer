@@ -4,15 +4,43 @@
     <Time :date="date" @input-time="atInputTime" @input-date="atInputDate"></Time>
 
     <div class="add-summary-button-area">
+      <!--
+        dialogの部分はNavBarの部分と同じ
+        コンポーネントを分けようとも思ったが、結局ボタンの部分が内部に入ってきてしまうため一旦断念
+        何個か同じような処理が必要になったらさすがにコンポーネント化する
+      -->
+      <v-dialog v-model="showDialog" persistent max-width="290">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            id="subject-add-button"
+            dark
+            large
+            color="red"
+            class="add-summary-button"
+            @click="showDialog = true"
+          >
+            <v-icon x-large dark>clear</v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title class="headline">Are you syre?</v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click="showDialog = false">Disagree</v-btn>
+            <v-btn color="green darken-1" flat @click="clearSummary">Agree</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
       <v-btn
         id="subject-add-button"
         dark
         large
-        color="orange"
+        color="blue"
         class="add-summary-button"
         @click="addSummary"
       >
-        <v-icon x-large dark>check</v-icon>
+        <v-icon x-large dark>edit</v-icon>
       </v-btn>
     </div>
   </div>
@@ -38,6 +66,7 @@ export default class SummaryInput extends Vue {
   public selectedSubject: string = '';
   public date: string = new Date().toISOString().substr(0, 10);
   public time: number = 0;
+  public showDialog: boolean = false;
 
   @Watch('selectedSubject')
   public onChangeSubject() {
@@ -64,8 +93,10 @@ export default class SummaryInput extends Vue {
             snapshot.exists &&
             // snapShotがstartしている => ストップウォッチを以前開始した
             (snapshot.data()!.isStart ||
-              // decidedTimeが0ではない => ストップウォッチを以前止めた
-              snapshot.data()!.decidedTime !== 0)
+              // snapShotがundefinedではない
+              (snapshot.data()!.decidedTime &&
+                // かつdecidedTimeが0ではない => ストップウォッチを以前止めた
+                snapshot.data()!.decidedTime !== 0))
           ) {
             const data = snapshot.data()!;
             this.selectedSubject = data.subject;
@@ -163,6 +194,33 @@ export default class SummaryInput extends Vue {
         console.log(error);
       });
   }
+
+  public clearSummary() {
+    const user = firebase.auth().currentUser;
+    const db = firebase.firestore();
+    const subjectDoc = db
+      .collection('users')
+      .doc(user!.uid)
+      .collection('subjects')
+      .doc(this.selectedSubject);
+    const resultDoc = subjectDoc.collection('results').doc(this.date);
+
+    this.subjectResumeDoc
+      .delete()
+      .then(() => {
+        this.$router.push({ name: 'home' });
+      })
+      .catch((error) => {
+        this.$store.dispatch(
+          'pushEvent',
+          new DisplaiedEvent(
+            `Something error occured.Check at Developer Tool Console.(${error})`,
+            EventType.Error
+          )
+        );
+        console.log(error);
+      });
+  }
 }
 </script>
 
@@ -170,16 +228,19 @@ export default class SummaryInput extends Vue {
 <style scoped lang="scss">
 .add-summary-button-area {
   position: relative;
+  display: flex;
   width: 100%;
   margin: 32px 0;
+  justify-content: center;
 }
 
 .add-summary-button {
-  width: 40%;
   height: calc(2em + 24px);
   position: relative;
+  width: 20%;
+  min-width: 160px;
   left: 0;
   right: 0;
-  margin: 0 30%;
+  margin: 12px;
 }
 </style>
