@@ -1,5 +1,7 @@
 <template>
-  <div class="home">Home</div>
+  <div class="home">
+    <Subject :subjectRef="subjectRef" v-for="subjectRef in subjectRefs" :key="subjectRef.id"></Subject>
+  </div>
 </template>
 
 <script lang="ts">
@@ -9,10 +11,30 @@ import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-@Component
+import Subject from '@/components/Home/Subject.vue';
+
+@Component({ components: { Subject } })
 export default class Home extends Vue {
+  public subjectRefs: firebase.firestore.QueryDocumentSnapshot[] = [];
+
   public created() {
     this.goToInputIfResume();
+    this.getSubjectRefs();
+  }
+
+  private getSubjectRefs() {
+    firebase.auth().onAuthStateChanged((user) => {
+      const db = firebase.firestore();
+      db.collection('users')
+        .doc(user!.uid)
+        .collection('subjects')
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((elm) => {
+            this.subjectRefs.push(elm);
+          });
+        });
+    });
   }
 
   private goToInputIfResume() {
