@@ -48,11 +48,7 @@ export default class Subject extends Vue {
   }
 
   public chartOptions(): Chart.ChartOptions {
-    return {
-      legend: {
-        display: false,
-      },
-    };
+    return {};
   }
 
   private getSummaryData(results: Map<string, number>): Chart.ChartData {
@@ -60,10 +56,10 @@ export default class Subject extends Vue {
       labels: [...results.keys()],
       datasets: [
         {
-          label: 'Data One',
+          label: 'Result[m:]',
           borderColor: '#009688',
-          backgroundColor: '#8BCFC8',
           pointStyle: 'circle',
+          fill: false,
           data: [...results.values()],
         },
       ],
