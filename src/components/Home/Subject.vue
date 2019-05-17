@@ -1,7 +1,9 @@
 <template>
   <div class="subject">
     {{subjectRef.id}}: {{resultTime}}
-    <ChartRenderer :chartData="chartData" :option="chartOptions" v-if="canRender"></ChartRenderer>
+    <transition name="bottom-to-top-slide">
+      <ChartRenderer :chartData="chartData" :options="chartOptions" v-if="canRender"></ChartRenderer>
+    </transition>
   </div>
 </template>
 
@@ -47,8 +49,16 @@ export default class Subject extends Vue {
     this.canRender = true;
   }
 
-  public chartOptions(): Chart.ChartOptions {
-    return {};
+  public get chartOptions(): Chart.ChartOptions {
+    return {
+      legend: {
+        display: false,
+      },
+      animation: {
+        duration: 1000,
+        easing: 'easeInOutQuad',
+      },
+    };
   }
 
   private getSummaryData(results: Map<string, number>): Chart.ChartData {
@@ -92,3 +102,15 @@ export default class Subject extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.bottom-to-top-slide-enter-active,
+.bottom-to-top-slide-leave-active {
+  transition: opacity 0.5s;
+}
+
+.bottom-to-top-slide-leave-to,
+.bottom-to-top-slide-enter {
+  opacity: 0;
+}
+</style>
