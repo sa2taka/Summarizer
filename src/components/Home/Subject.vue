@@ -1,10 +1,22 @@
 <template>
-  <div class="subject">
-    {{subjectRef.id}}: {{resultTime}}
+  <v-card class="subject">
+    <v-card-title primary-title class="title-grid">
+      <div class="subject-title">{{subjectRef.id}}</div>
+    </v-card-title>
+
+    <v-card-text class="result-grid">
+      <div class="result-time">total: {{formatTime(resultTime)}}</div>
+    </v-card-text>
+
     <transition name="bottom-to-top-slide">
-      <ChartRenderer :chartData="chartData" :options="chartOptions" v-if="canRender"></ChartRenderer>
+      <ChartRenderer
+        :chartData="chartData"
+        :options="chartOptions"
+        v-if="canRender"
+        class="chart-grid"
+      ></ChartRenderer>
     </transition>
-  </div>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -51,12 +63,37 @@ export default class Subject extends Vue {
 
   public get chartOptions(): Chart.ChartOptions {
     return {
+      maintainAspectRatio: false,
       legend: {
         display: false,
       },
       animation: {
         duration: 1000,
         easing: 'easeInOutQuad',
+      },
+      scales: {
+        xAxes: [
+          {
+            display: false,
+            ticks: {
+              display: false,
+            },
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            display: false,
+            ticks: {
+              display: false,
+            },
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
       },
     };
   }
@@ -68,6 +105,8 @@ export default class Subject extends Vue {
         {
           label: 'Result[m:]',
           borderColor: '#009688',
+          pointBorderColor: '#00000000',
+          pointBackgroundColor: '#00000000',
           pointStyle: 'circle',
           fill: false,
           data: [...results.values()],
@@ -97,14 +136,63 @@ export default class Subject extends Vue {
     return `${year}-${month}-${day}`;
   }
 
+  private formatTime(time: number): string {
+    const hour = `${Math.floor(time / 60)}`;
+    const minute = this.putZeroPrefix(`${time % 60}`, 2);
+
+    return `${hour}：${minute}`;
+  }
+
   private putZeroPrefix(str: string, length: number): string {
-    return ('0' + str).slice(-length);
+    return ('00' + str).slice(-length);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.bottom-to-top-slide-enter-active,
+.subject {
+  display: grid;
+  grid-template-rows: 80px 80px;
+  grid-template-columns: 40% 30% 1fr;
+  margin: 5%;
+}
+
+.title-grid {
+  grid-row: 1 / 2;
+  grid-column: 1 / 3;
+}
+
+.subject-title {
+  font-size: 24px;
+  white-space: nowrap;
+}
+
+.result-grid {
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
+  height: 100%;
+  width: 100%;
+  margin: 0 0;
+}
+
+.result-time {
+  color: #afafaf;
+  position: relative;
+  font-size: 18px;
+  margin: 12px;
+  right: 0;
+  margin: 12px 0 12px 0;
+}
+
+.chart-grid {
+  position: relative;
+  grid-row: 2 / 3;
+  grid-column: 2 / 4;
+  margin: 6px 12px;
+  padding: 6px 0;
+}
+
+bottom-to-top-slide-enter-active,
 .bottom-to-top-slide-leave-active {
   transition: opacity 0.5s;
 }
