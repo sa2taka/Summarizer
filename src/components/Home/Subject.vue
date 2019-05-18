@@ -8,6 +8,43 @@
       <div class="result-time">total: {{formatTime(resultTime)}}</div>
     </v-card-text>
 
+    <div class="button-grid">
+      <v-btn fab dark small depressed color="teal" class="add-button" @click="true">
+        <v-icon dark>edit</v-icon>
+      </v-btn>
+
+      <v-btn fab dark small depressed color="blue" class="add-button" @click="true">
+        <v-icon dark>list_alt</v-icon>
+      </v-btn>
+
+      <v-dialog v-model="clearSubjectDialog" persistent max-width="290">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            fab
+            dark
+            small
+            depressed
+            color="red"
+            class="clear-subject-button"
+            @click="clearSubjectDialog = true"
+          >
+            <v-icon dark>clear</v-icon>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title class="headline">
+            Clear {{ subjectRef.id}} Subject.
+            <br>Are you syre?
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click="clearSubjectDialog = false">Disagree</v-btn>
+            <v-btn color="green darken-1" flat @click="clearSubject">Agree</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
+
     <transition name="bottom-to-top-slide">
       <ChartRenderer
         :chartData="chartData"
@@ -21,6 +58,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { DisplaiedEvent, EventType } from '../../libs/DisplaiedEvent';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import Chart from 'chart.js';
@@ -39,8 +77,18 @@ export default class Subject extends Vue {
 
   public chartData!: Chart.ChartData;
   public canRender = false;
+  public clearSubjectDialog = false;
 
   public async created() {
+    window.addEventListener('click', ({ target }) => {
+      // ボタンを押したときにisAddingValueがfalseになるため、
+      // 祖先要素にsubject-add-buttonがあった場合はすぐにreturnする
+      if (target!.closest('.clear-subject-button')) {
+        return;
+      }
+      this.clearSubjectDialog = false;
+    });
+
     const snapshot = await this.subjectRef.ref.collection('results').get();
 
     let sum = 0;
@@ -59,6 +107,19 @@ export default class Subject extends Vue {
     this.resultTime = String(sum);
     this.chartData = this.getSummaryData(results);
     this.canRender = true;
+  }
+
+  public clearSubject() {
+    this.subjectRef.ref.delete().then(() => {
+      this.$router.go(0);
+      this.$store.dispatch(
+        'pushEvent',
+        new DisplaiedEvent(
+          `${this.subjectRef.id} Subject is Deleted.`,
+          EventType.Success
+        )
+      );
+    });
   }
 
   public get chartOptions(): Chart.ChartOptions {
@@ -153,7 +214,7 @@ export default class Subject extends Vue {
 .subject {
   display: grid;
   grid-template-rows: 80px 80px;
-  grid-template-columns: 40% 30% 1fr;
+  grid-template-columns: 30% 30% 1fr;
   margin: 5%;
 }
 
@@ -182,6 +243,12 @@ export default class Subject extends Vue {
   margin: 12px;
   right: 0;
   margin: 12px 0 12px 0;
+}
+
+.button-grid {
+  grid-row: 1 / 2;
+  grid-column: 3 / 4;
+  margin: auto auto;
 }
 
 .chart-grid {
