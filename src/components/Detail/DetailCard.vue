@@ -104,12 +104,12 @@ export default class DetailCard extends Vue {
 }
 
 .date {
-  font-size: 20px;
+  font-size: 18px;
   margin: auto 0;
 }
 
 .time {
-  width: 60%;
+  width: 40%;
   font-size: 16px;
   margin: auto 0;
 }

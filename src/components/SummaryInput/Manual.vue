@@ -73,6 +73,6 @@ export default class Manual extends Vue {
 .selected-center .v-select__selection {
   width: 100%;
   justify-content: center;
-  font-size: 30px;
+  font-size: 24px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="sidebar" app>
+    <v-navigation-drawer v-model="sidebar" class="drawer" app>
       <v-list>
         <v-list-tile>
           <v-btn flat to="/">Home</v-btn>
@@ -85,4 +85,7 @@ export default class Navbar extends Vue {
 </script>
 
 <style lang="scss">
+.drawer {
+  width: 200px !important;
+}
 </style>
