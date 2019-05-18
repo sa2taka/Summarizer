@@ -84,6 +84,12 @@ export default class SummaryInput extends Vue {
   }
 
   public created() {
+    const subject = this.$route.query.subject;
+
+    if (subject) {
+      this.selectedSubject = subject as string;
+    }
+
     firebase.auth().onAuthStateChanged((user) => {
       this.subjectResumeDoc
         .get()

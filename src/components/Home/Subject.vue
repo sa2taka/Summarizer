@@ -9,11 +9,18 @@
     </v-card-text>
 
     <div class="button-grid">
-      <v-btn fab dark small depressed color="teal" class="add-button" @click="true">
+      <v-btn
+        fab
+        dark
+        small
+        depressed
+        color="teal"
+        @click="$router.push({ name: 'summary-input', query: { subject: subjectRef.id }})"
+      >
         <v-icon dark>edit</v-icon>
       </v-btn>
 
-      <v-btn fab dark small depressed color="blue" class="add-button" @click="true">
+      <v-btn fab dark small depressed color="blue" @click="true">
         <v-icon dark>list_alt</v-icon>
       </v-btn>
 
