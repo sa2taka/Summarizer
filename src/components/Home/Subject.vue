@@ -222,7 +222,7 @@ export default class Subject extends Vue {
   display: grid;
   grid-template-rows: 80px 80px;
   grid-template-columns: 30% 30% 1fr;
-  margin: 5%;
+  margin: 20px;
 }
 
 .title-grid {
@@ -255,7 +255,7 @@ export default class Subject extends Vue {
 .button-grid {
   grid-row: 1 / 2;
   grid-column: 3 / 4;
-  margin: auto auto;
+  margin: auto 5% auto auto;
 }
 
 .chart-grid {
