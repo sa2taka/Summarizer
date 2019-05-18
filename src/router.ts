@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Signin from './views/Signin.vue';
 import SummaryInput from './views/SummaryInput.vue';
+import Detail from './views/Detail';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
@@ -30,6 +31,12 @@ const router = new Router({
       name: 'signin',
       component: Signin,
       meta: { requiresNotSignedIn: true },
+    },
+    {
+      path: '/detail/:subject',
+      name: 'detail',
+      component: Detail,
+      meta: { requiresAuth: true },
     },
   ],
 });

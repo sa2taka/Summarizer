@@ -20,7 +20,7 @@
         <v-icon dark>edit</v-icon>
       </v-btn>
 
-      <v-btn fab dark small depressed color="blue" @click="true">
+      <v-btn fab dark small depressed color="blue" @click="$router.push(`detail/${subjectRef.id}`)">
         <v-icon dark>list_alt</v-icon>
       </v-btn>
 
@@ -155,6 +155,7 @@ export default class Subject extends Vue {
           {
             display: false,
             ticks: {
+              min: 0,
               display: false,
             },
             gridLines: {
