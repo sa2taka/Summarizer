@@ -150,14 +150,14 @@ export default class Time extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .time-input-area {
-  min-height: 420px;
+  min-height: 300px;
 }
 
 .date-input-content {
   position: relative;
   padding: 0 40px 0 0;
   margin: 0 auto;
-  width: 420px;
+  width: 320px;
 }
 
 .slide-fade-enter-active {
@@ -176,8 +176,8 @@ export default class Time extends Vue {
 
 .material-surface {
   position: absolute;
-  height: 320px;
-  width: 320px;
+  height: 220px;
+  width: 220px;
   left: 0;
   right: 0;
   margin: 0 auto;
