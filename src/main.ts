@@ -5,8 +5,11 @@ import router from './router';
 import store from './store';
 import './registerServiceWorker';
 import * as firebase from 'firebase/app';
+import Chart from 'chart.js';
 
 Vue.config.productionTip = false;
+
+Chart.defaults.global.defaultFontColor = '#b0b0b0';
 
 const config = {
   apiKey: 'AIzaSyCYY4XQDVNtw87M2-MRBy2xHY9nap244O8',
@@ -21,5 +24,5 @@ firebase.initializeApp(config);
 new Vue({
   router,
   store,
-  render: h => h(App),
+  render: (h) => h(App),
 }).$mount('#app');
