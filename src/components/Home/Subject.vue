@@ -222,7 +222,7 @@ export default class Subject extends Vue {
 .subject {
   display: grid;
   grid-template-rows: 80px 80px;
-  grid-template-columns: 30% 30% 1fr;
+  grid-template-columns: 30% 1fr 200px;
   margin: 20px;
 }
 
