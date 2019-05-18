@@ -166,7 +166,7 @@ export default class Stopwatch extends Vue {
 }
 
 .display-watch {
-  font-size: 44px;
+  font-size: 32px;
   margin: 12px 0;
 }
 

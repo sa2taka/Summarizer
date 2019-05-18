@@ -15,12 +15,21 @@
         small
         depressed
         color="teal"
+        class="card-button"
         @click="$router.push({ name: 'summary-input', query: { subject: subjectRef.id }})"
       >
         <v-icon dark>edit</v-icon>
       </v-btn>
 
-      <v-btn fab dark small depressed color="blue" @click="$router.push(`detail/${subjectRef.id}`)">
+      <v-btn
+        fab
+        dark
+        small
+        depressed
+        color="blue"
+        class="card-button"
+        @click="$router.push(`detail/${subjectRef.id}`)"
+      >
         <v-icon dark>list_alt</v-icon>
       </v-btn>
 
@@ -32,7 +41,7 @@
             small
             depressed
             color="red"
-            class="clear-subject-button"
+            class="clear-subject-button card-button"
             @click="clearSubjectDialog = true"
           >
             <v-icon dark>clear</v-icon>
@@ -222,7 +231,7 @@ export default class Subject extends Vue {
 .subject {
   display: grid;
   grid-template-rows: 80px 80px;
-  grid-template-columns: 30% 1fr 200px;
+  grid-template-columns: 30% 1fr 160px;
   margin: 20px;
 }
 
@@ -232,8 +241,7 @@ export default class Subject extends Vue {
 }
 
 .subject-title {
-  font-size: 24px;
-  white-space: nowrap;
+  font-size: 18px;
 }
 
 .result-grid {
@@ -247,16 +255,21 @@ export default class Subject extends Vue {
 .result-time {
   color: #afafaf;
   position: relative;
-  font-size: 18px;
+  font-size: 15px;
   margin: 12px;
   right: 0;
   margin: 12px 0 12px 0;
+  white-space: nowrap;
 }
 
 .button-grid {
   grid-row: 1 / 2;
   grid-column: 3 / 4;
   margin: auto 5% auto auto;
+}
+
+.card-button {
+  margin: 4px;
 }
 
 .chart-grid {
